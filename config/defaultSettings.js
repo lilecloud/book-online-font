@@ -13,5 +13,4 @@ export default {
   title: 'Ant Design Pro',
   pwa: false,
   iconfontUrl: '',
-  history: 'hash'
 };
