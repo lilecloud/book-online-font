@@ -76,7 +76,7 @@ export default {
     // defaultGitUrl: 'https://gitee.com/ant-design/pro-blocks',
     defaultGitUrl: 'https://github.com/ant-design/pro-blocks',
   },
-  history : 'hash',
+  history: 'hash',
   targets: {
     ie: 11,
   },
@@ -101,11 +101,11 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
+          // authority: ['admin', 'user'],
           routes: [
             {
               path: '/',
-              authority: ['admin'],
+              // authority: ['admin'],
               redirect: '/user/login',
             },
             {

@@ -1,9 +1,9 @@
-import { routerRedux } from 'dva/router';
+import router from 'umi/router';
 import { stringify } from 'querystring';
 import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
-import { userLogin } from '@/services/login'
-import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
+import { userLogin } from '@/services/login';
+import { logout } from '@/services/user';
+import { message } from 'antd';
 const Model = {
   namespace: 'login',
   state: {
@@ -11,14 +11,16 @@ const Model = {
   },
   effects: {
     *login({ payload }, { call, put }) {
-      const  response = yield call(userLogin, payload);
+      const response = yield call(userLogin, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       }); // Login successfully
-      console.log(response)
-      if (response.code  == '0') {
-        yield put(routerRedux.push("/welcome"));
+      console.log(response);
+      if (response.code == 0) {
+        router.push('/welcome');
+      } else {
+        message.warn(response.msg);
       }
     },
 
@@ -26,23 +28,20 @@ const Model = {
       yield call(getFakeCaptcha, payload);
     },
 
-    *logout(_, { put }) {
-      const { redirect } = getPageQuery(); // redirect
-
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        yield put(
-          routerRedux.replace({
-            pathname: '/user/login',
-            search: stringify({
-              redirect: window.location.href,
-            }),
-          }),
-        );
+    *logout({ payload, callback }, { call, put }) {
+      const response = yield call(logout);
+      if (!response) {
+        return;
+      }
+      if (response.code == 0) {
+        callback();
+      } else {
+        message.warn(response.msg);
       }
     },
   },
   reducers: {
-    changeLoginStatus(state, { payload={} }) {
+    changeLoginStatus(state, { payload = {} }) {
       // setAuthority(payload.currentAuthority);
       return { ...state, status: payload.status, type: payload.type };
     },

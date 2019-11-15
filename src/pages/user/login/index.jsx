@@ -4,11 +4,13 @@ import React, { Component } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import LoginComponents from './components/Login';
+import router from 'umi/router';
 import styles from './style.less';
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
 
-@connect(({ login, loading }) => ({
+@connect(({ login, user, loading }) => ({
   userLogin: login,
+  currentUser: user.currentUser,
   submitting: loading.effects['login/login'],
 }))
 class Login extends Component {
@@ -17,19 +19,28 @@ class Login extends Component {
     type: 'account',
     autoLogin: true,
   };
+
+  componentDidMount() {
+    const { currentUser } = this.props;
+    console.log(this.props);
+    if (!!currentUser && !!currentUser.username) {
+      router.push('/welcome');
+    }
+  }
+
   changeAutoLogin = e => {
     this.setState({
       autoLogin: e.target.checked,
     });
   };
   handleSubmit = (err, values) => {
-    const { type,autoLogin } = this.state;
+    const { type, autoLogin } = this.state;
 
     if (!err) {
       const { dispatch } = this.props;
       dispatch({
         type: 'login/login',
-        payload: { ...values, type,rememberMe: autoLogin },
+        payload: { ...values, type, rememberMe: autoLogin },
       });
     }
   };

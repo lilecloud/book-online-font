@@ -15,15 +15,28 @@ const UserModel = {
 
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
+      console.log('currentUserRespon', response);
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: response.data,
+      });
+    },
+    *clearCurrentUser(_, { call, put }) {
+      yield put({
+        type: 'clearCurrent',
       });
     },
   },
   reducers: {
     saveCurrentUser(state, action) {
-      return { ...state, currentUser: action.payload || {} };
+      console.log('state', state, 'action', action);
+      return { ...state, currentUser: action.payload };
+    },
+    clearCurrent(state, action) {
+      return {
+        ...state,
+        currentUser: {},
+      };
     },
 
     changeNotifyCount(

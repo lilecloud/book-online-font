@@ -7,8 +7,8 @@ import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 
 class AvatarDropdown extends React.Component {
-  onMenuClick = event => {
-    const { key } = event;
+  onMenuClick = ({ item, key, keyPath, domEvent }) => {
+    // const { key } = event;
 
     if (key === 'logout') {
       const { dispatch } = this.props;
@@ -16,6 +16,11 @@ class AvatarDropdown extends React.Component {
       if (dispatch) {
         dispatch({
           type: 'login/logout',
+          callback: () => {
+            dispatch({
+              type: 'user/clearCurrentUser',
+            });
+          },
         });
       }
 
@@ -55,11 +60,11 @@ class AvatarDropdown extends React.Component {
         </Menu.Item>
       </Menu>
     );
-    return currentUser && currentUser.name ? (
+    return currentUser && currentUser.username ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-          <span className={styles.name}>{currentUser.name}</span>
+          <Avatar size="small" className={styles.avatar} icon="user" alt="avatar" />
+          <span className={styles.name}>{currentUser.username}</span>
         </span>
       </HeaderDropdown>
     ) : (
