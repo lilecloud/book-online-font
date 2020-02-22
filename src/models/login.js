@@ -4,6 +4,7 @@ import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
 import { userLogin } from '@/services/login';
 import { logout } from '@/services/user';
 import { message } from 'antd';
+import { setAuthority } from '@/utils/authority';
 const Model = {
   namespace: 'login',
   state: {
@@ -16,8 +17,9 @@ const Model = {
         type: 'changeLoginStatus',
         payload: response,
       }); // Login successfully
-      console.log(response);
       if (response.code == 0) {
+        setAuthority(response.data);
+        console.log(response);
         router.push('/welcome');
       } else {
         message.warn(response.msg);

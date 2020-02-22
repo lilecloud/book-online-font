@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import LoginComponents from './components/Login';
 import router from 'umi/router';
 import styles from './style.less';
+import { getAuthority } from '@/utils/authority';
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
 
 @connect(({ login, user, loading }) => ({
@@ -22,8 +23,8 @@ class Login extends Component {
 
   componentDidMount() {
     const { currentUser } = this.props;
-    console.log(this.props);
-    if (!!currentUser && !!currentUser.username) {
+    // console.log(this.props);
+    if (!!currentUser && !!currentUser.UserName) {
       router.push('/welcome');
     }
   }

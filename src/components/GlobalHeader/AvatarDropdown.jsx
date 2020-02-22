@@ -5,6 +5,7 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import { removeAuthority } from '@/utils/authority';
 
 class AvatarDropdown extends React.Component {
   onMenuClick = ({ item, key, keyPath, domEvent }) => {
@@ -20,10 +21,12 @@ class AvatarDropdown extends React.Component {
             dispatch({
               type: 'user/clearCurrentUser',
             });
+            removeAuthority();
           },
         });
       }
-
+      console.log('logout ok');
+      router.push('/user/login');
       return;
     }
 

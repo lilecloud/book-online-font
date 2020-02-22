@@ -101,18 +101,16 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          // authority: ['admin', 'user'],
           routes: [
             {
               path: '/',
-              // authority: ['admin'],
-              redirect: '/user/login',
+              redirect: '/welcome',
             },
             {
               path: '/welcome',
               name: 'welcome',
               icon: 'smile',
-              component: './Welcome',
+              component: './welcome',
             },
             {
               component: './404',
@@ -124,6 +122,7 @@ export default {
         },
       ],
     },
+
     {
       component: './404',
     },
